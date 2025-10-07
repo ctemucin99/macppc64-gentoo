@@ -42,7 +42,7 @@ tar xpvf boot*.tar.xz -C /mnt/gentoo/boot
 rm -f boot*.tar.xz
 mkdir -p /mnt/gentoo/lib/modules
 wget https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz
-tar xpvf boot*.tar.xz -C /mnt/gentoo/lib/modules
+tar xpvf modules*.tar.xz -C /mnt/gentoo/lib/modules
 rm -f modules*.tar.xz
 
 ### Configuring GRUB ###
