@@ -37,9 +37,11 @@ stage3_tarball=$(wget -O - https://distfiles.gentoo.org/releases/ppc/autobuilds/
 cd /mnt/gentoo
 url=https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/$stage3_tarball
 wget -O - $url | unxz | tar xp --xattrs-include='*.*' --numeric-owner
-wget -O - https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/boot-6.12.41-gentoo-ppc64.tar.xz | unxz | tar xp --xattrs-include='*.*' --numeric-owner
+url=https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/boot-6.12.41-gentoo-ppc64.tar.xz
+wget $url | unxz | tar xp --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo/boot
 mkdir -p /mnt/gentoo/lib/modules
-wget -O - https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz | unxz | tar xp --xattrs-include='*.*' --numeric-owner
+url=https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz
+wget $url | unxz | tar xp --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo/lib/modules
 rm -rf *.tar.xz
 
 ### Configuring GRUB ###
