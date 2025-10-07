@@ -30,18 +30,18 @@ sleep 1
 umount /dev/sda4 || true
 mkfs.xfs -f /dev/sda4
 
-### Downloading and extracting stage3 tarfiles ###
+### Mounting the disk and getting the stage3 tarfiles ready for chrooting ###
 mkdir -p /mnt/gentoo
-cd /mnt/gentoo
 mount /dev/sda4 /mnt/gentoo
 stage3_tarball=$(wget -O - https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/latest-stage3-ppc64-openrc.txt | grep '\.tar\.' | awk '{print $1}')
+cd /mnt/gentoo
 url=https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/$stage3_tarball
-wget -O - $url | unxz | tar xpvf --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo
+wget -O - $url | unxz | tar xp --xattrs-include='*.*' --numeric-owner
 
 ### Extracting pre-compiled kernel and module tarfiles ###
-wget https://raw.githubusercontent.com/ctemucin99/public/refs/heads/main/boot-6.12.41-gentoo-ppc64.tar.xz
+wget https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/boot-6.12.41-gentoo-ppc64.tar.xz
 tar xpvf boot-6.12.41-gentoo-ppc64.tar.xz -C /mnt/gentoo/boot
-wget https://raw.githubusercontent.com/ctemucin99/public/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz
+wget https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz
 mkdir -p /mnt/gentoo/lib/modules
 tar xpvf modules-6.12.41-gentoo-ppc64.tar.xz -C /mnt/gentoo/lib/modules
 rm -rf *.tar
