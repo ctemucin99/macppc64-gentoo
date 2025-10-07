@@ -83,11 +83,6 @@ EOF
 locale-gen
 echo gentoo > /etc/hostname
 
-### Getting genfstab and creating a temporary fstab ###
-wget https://raw.githubusercontent.com/glacion/genfstab/refs/heads/master/genfstab -O /usr/bin
-chmod /usr/bin/genfstab
-/usr/bin/genfstab -U > /etc/fstab
-
 ### Portage config
 cat << EOF > /etc/portage/make.conf 
 # These settings were set by the catalyst build script that automatically
@@ -122,6 +117,12 @@ export NPROC1=$(( NPROC + 1 ))
 echo "MAKEOPTS=\"-j${NPROC1} -l$(nproc)\"" > nproc
 sed -i 10r<(sed '1,1!d' nproc) /etc/portage/make.conf
 rm nproc
+
+### Getting genfstab and creating a temporary fstab ###
+wget https://raw.githubusercontent.com/glacion/genfstab/refs/heads/master/genfstab -P /usr/bin/
+chmod /usr/bin/genfstab
+/usr/bin/genfstab -U > /etc/fstab
+
 
 ### Rebooting the system ###
 reboot
