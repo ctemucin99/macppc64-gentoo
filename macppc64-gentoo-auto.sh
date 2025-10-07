@@ -32,6 +32,7 @@ mkfs.xfs -f /dev/sda4
 
 ### Downloading and extracting stage3 tarfiles ###
 mkdir -p /mnt/gentoo
+cd /mnt/gentoo
 mount /dev/sda4 /mnt/gentoo
 stage3_tarball=$(wget -O - https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/latest-stage3-ppc64-openrc.txt | grep '\.tar\.' | awk '{print $1}')
 url=https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/$stage3_tarball
@@ -43,6 +44,7 @@ tar xpvf boot-6.12.41-gentoo-ppc64.tar.xz -C /mnt/gentoo/boot
 wget https://raw.githubusercontent.com/ctemucin99/public/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz
 mkdir -p /mnt/gentoo/lib/modules
 tar xpvf modules-6.12.41-gentoo-ppc64.tar.xz -C /mnt/gentoo/lib/modules
+rm -rf *.tar
 
 ### Configuring GRUB ###
 hformat -l bootstrap /dev/sda2
