@@ -1,12 +1,14 @@
 #!/bin/bash
 ### The config I use for a minimal KVM-PR hypervisor installation on my PowerPC G5 Quad // Useful for AmigaOS 4.1, Mac OS 9 (and probably AIX 4/5) virtualization ###
+### Note that /dev/sda would be wiped without a further notice ###
+
 ### Install script -> cellularmitosis@MacRumors // Modified for a precompiled kernel and made some small changes ###
 ### Kernel config -> Tratkazir_the_1st@GentooForums // Added KVM, Virtio, USB3.0 and some other modules ###
 ### Genfstab -> glacion@GitHub -> Forked from arch-install-scripts (https://projects.archlinux.org/arch-install-scripts.git/) ###
 
 set -x
 
-### Partitioning the disk and making the filesystem ###
+### Partitioning the disk and creating the filesystem ###
 mac-fdisk /dev/sda << EOF
 i
 y
@@ -36,6 +38,7 @@ url=https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-op
 wget -O - $url | unxz | tar xpvf --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo
 
 ### Extracting pre-compiled kernel and module tarfiles ###
+wget https://raw.githubusercontent.com/ctemucin99/public/refs/heads/main/boot-6.12.41-gentoo-ppc64.tar.xz
 tar xpvf boot-6.12.41-gentoo-ppc64.tar.xz -C /mnt/gentoo/boot
 wget https://raw.githubusercontent.com/ctemucin99/public/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz
 mkdir -p /mnt/gentoo/lib/modules
@@ -118,4 +121,6 @@ rm nproc
 wget https://raw.githubusercontent.com/glacion/genfstab/refs/heads/master/genfstab -O /usr/bin
 chmod /usr/bin/genfstab
 /usr/bin/genfstab -U > /etc/fstab
+
+### Rebooting the system ###
 reboot
