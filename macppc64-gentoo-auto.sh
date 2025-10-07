@@ -36,10 +36,10 @@ mount /dev/sda4 /mnt/gentoo
 stage3_tarball=$(wget -O - https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/latest-stage3-ppc64-openrc.txt | grep '\.tar\.' | awk '{print $1}')
 cd /mnt/gentoo
 url=https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/$stage3_tarball
-wget -O - $url | unxz | tar xp --xattrs-include='*.*' --numeric-owner
-wget https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/boot-6.12.41-gentoo-ppc64.tar.xz | tar -xpvf -C /mnt/boot/
+wget -O - $url | tar xpvf --xattrs-include='*.*' --numeric-owner
+wget https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/boot-6.12.41-gentoo-ppc64.tar.xz | tar xpvf -C /mnt/boot/
 mkdir -p /mnt/gentoo/lib/modules
-wget https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz | tar -xpvf -C /mnt/lib/modules/
+wget https://raw.githubusercontent.com/ctemucin99/macppc64-gentoo/refs/heads/main/modules-6.12.41-gentoo-ppc64.tar.xz | tar xpvf -C /mnt/lib/modules/
 rm -rf *.tar.xz
 
 ### Configuring GRUB ###
