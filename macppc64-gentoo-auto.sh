@@ -28,11 +28,13 @@ y
 EOF
 sleep 1
 umount /dev/sda4 || true
+mkswap /dev/sda3
 mkfs.xfs -f /dev/sda4
 
 ### Mounting the disk and getting the stage3 ready ###
 mkdir -p /mnt/gentoo
 mount /dev/sda4 /mnt/gentoo
+swapon /dev/sda3
 stage3_tarball=$(wget -O - https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/latest-stage3-ppc64-openrc.txt | grep '\.tar\.' | awk '{print $1}')
 cd /mnt/gentoo
 url=https://distfiles.gentoo.org/releases/ppc/autobuilds/current-stage3-ppc64-openrc/$stage3_tarball
@@ -80,6 +82,7 @@ passwd gentoo << EOF
 gentoo
 gentoo
 EOF
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 echo gentoo > /etc/hostname
 
@@ -89,13 +92,13 @@ cat << EOF > /etc/portage/make.conf
 # built this stage.
 # Please consult /usr/share/portage/config/make.conf.example for a more
 # detailed example.
-COMMON_FLAGS="-mcpu 970 -O2 -maltivec -mabi=altivec -pipe"
+COMMON_FLAGS="-mcpu=970 -O2 -maltivec -mabi=altivec -pipe"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS}"
 FCFLAGS="${COMMON_FLAGS}"
 FFLAGS="${COMMON_FLAGS}"
 USE="X udev dbus lto lm-sensors ibm ieee1394 opencl opengl -systemd -nvenc -wayland -xwayland -qt5 -qt6 -kde -gnome"
-ACCEPT_LICENSES="*"
+ACCEPT_LICENSE="*"
 ACCEPT_KEYWORDS="~ppc64"
 VIDEO_CARDS="nouveau radeon"
 GRUB_PLATFORMS="ieee1275"
@@ -120,8 +123,9 @@ rm nproc
 
 ### Getting genfstab and creating a temporary fstab ###
 wget https://raw.githubusercontent.com/glacion/genfstab/refs/heads/master/genfstab -P /usr/bin/
-chmod /usr/bin/genfstab
+chmod +x /usr/bin/genfstab
 /usr/bin/genfstab -U > /etc/fstab
+ENDCHROOT
 
 
 ### Rebooting the system ###
